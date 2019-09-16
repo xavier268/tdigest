@@ -24,10 +24,16 @@ func (td *TD) Count() int {
 	return td.n
 }
 
+// Digest will sort and digest, then return the object for chaining.
+func (td *TD) Digest() *TD {
+	td.Sort().digest()
+	return td
+}
+
 // digest is the core processing part of the algorithm.
 // It examines all buckets, left to right, merging buckets every time it is possible.
 // It assumes buckets are already ordered, and will leave them ordered.
-func (td *TD) digest() {
+func (td *TD) digest() *TD {
 
 	for i := 0; i+1 < len(td.bkts); {
 		// we consider merging (i) and (i+1)
@@ -51,6 +57,7 @@ func (td *TD) digest() {
 		}
 
 	}
+	return td
 
 }
 
@@ -74,12 +81,25 @@ func (td *TD) Sort() *TD {
 
 // Add a set of values.
 // Values are added as independant buckets.
-// You need to sort/digest when finished : this is not done by default.
-func (td *TD) Add(values ...float64) {
+// You NEED to sort/digest when finished : this is not done by default.
+func (td *TD) Add(values ...float64) *TD {
 	for _, v := range values {
 		b := bkt{sx: v, n: 1}
 		td.bkts = append(td.bkts, b)
 	}
+	return td
+}
+
+// Merge will merge tt into td.
+// It will combine the sizer, to the max of both.
+// It will Sort and Digest automatically.
+// tt is left unchanged.
+func (td *TD) Merge(tt *TD) *TD {
+	td.sizer = MaxSizer(td.sizer, tt.sizer)
+	td.n += tt.n
+	td.bkts = append(td.bkts, tt.bkts...)
+	td.Digest()
+	return td
 }
 
 // String display human readable value.
