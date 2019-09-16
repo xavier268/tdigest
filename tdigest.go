@@ -26,7 +26,7 @@ func (td *TD) Count() int {
 
 // Digest will sort and digest, then return the object for chaining.
 func (td *TD) Digest() *TD {
-	td.Sort().digest()
+	td.sort().digest()
 	return td
 }
 
@@ -64,7 +64,7 @@ func (td *TD) digest() *TD {
 // Sort will sort the buckets.
 // It will NOT merge them.
 // It updates their sn field and the total count.
-func (td *TD) Sort() *TD {
+func (td *TD) sort() *TD {
 	// sort ...
 	sort.Slice(td.bkts, func(i, j int) bool {
 		return td.bkts[i].mean() < td.bkts[j].mean()
