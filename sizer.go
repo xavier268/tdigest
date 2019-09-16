@@ -32,3 +32,25 @@ func MaxSizer(s1, s2 Sizer) Sizer {
 		return v1
 	}
 }
+
+// ForceMinMax modify s to ensure the min/max buckets are sized 1.
+// Other bucket sized are derived from s.
+func ForceMinMax(s Sizer) Sizer {
+	return func(n int, ql, qr float64) float64 {
+		if ql <= 0.0 || qr >= 1. {
+			return 1
+		}
+		return s(n, ql, qr)
+	}
+}
+
+// ForceMinimumResolution modify s to ensure buckets never exceed a with of qres.
+// Other bucket sized are derived from s.
+func ForceMinimumResolution(s Sizer, qres float64) Sizer {
+	return func(n int, ql, qr float64) float64 {
+		if qr-ql <= 0. || qr-ql >= qres {
+			return 1
+		}
+		return s(n, ql, qr)
+	}
+}
