@@ -92,7 +92,7 @@ func (td *TD) Add(values ...float64) *TD {
 
 // Merge will merge tt into td.
 // It will combine the sizer, to the max of both.
-// It will Sort and Digest automatically.
+// It will (Sort and) Digest automatically.
 // tt is left unchanged.
 func (td *TD) Merge(tt *TD) *TD {
 	td.sizer = MaxSizer(td.sizer, tt.sizer)
