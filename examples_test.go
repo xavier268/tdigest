@@ -35,7 +35,7 @@ func ExampleTD() {
 }
 
 func ExampleSizer() {
-	// A polynomial sizer, sacle to less than 10 buckets.
+	// A polynomial sizer, scaled to less than 10 buckets.
 	sz := ScaleSizer(PolySizer, 60.)
 	// Where min and max are protected by single element buckets
 	sz = ForceMinMax(sz)
