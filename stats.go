@@ -1,7 +1,5 @@
 package tdigest
 
-import "fmt"
-
 // At provides the value corresponding to the provided quartile.
 // The value returned is the best estimated such that the percentage
 // of datapoints that are strictly below this value is the quartile.
@@ -29,7 +27,6 @@ func (td *TD) At(quartile float64) (value float64) {
 			// Interpolate with previous
 			v := b.mean()
 			q := b.q(td.n)
-			fmt.Printf("interpolating around %d", i)
 			return v1 + (quartile-q1)*(v-v1)/(q-q1)
 
 		}

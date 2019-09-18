@@ -39,10 +39,9 @@ func (td *TD) digest() *TD {
 	for i := 0; i+1 < len(td.bkts); {
 		// we consider merging (i) and (i+1)
 		n := td.n
-		ql := td.bkts[i].ql(n)
-		qr := td.bkts[i+1].qr(n)
+		q := td.bkts[i].q(n)
 		sn := float64(td.bkts[i].n + td.bkts[i+1].n)
-		if sn <= td.sizer(n, ql, qr) {
+		if sn <= td.sizer(n, q) {
 			// do the merge  and keep same i index ...
 			td.bkts[i].merge(&td.bkts[i+1])
 			// remove bucket i+1 - is this check necessary ?
@@ -119,8 +118,8 @@ func (td *TD) String() string {
 		len(td.bkts),
 	)
 	for i, b := range td.bkts {
-		s += fmt.Sprintf("%d : %s, quartiles left :%0.6f right:%0.6f\n",
-			i, b.String(), b.ql(td.n), b.qr(td.n))
+		s += fmt.Sprintf("%d : %s, quartiles :%0.6f\n",
+			i, b.String(), b.q(td.n))
 	}
 
 	return s
