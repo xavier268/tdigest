@@ -34,6 +34,8 @@ func (td *TD) At(quartile float64) (value float64) {
 // Quartile provides the quartile (percentage of data points that are
 // equals or below that value).
 func (td *TD) Quartile(value float64) float64 {
+	
+	// TODO
 	return 0.
 }
 
