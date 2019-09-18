@@ -18,7 +18,7 @@ func SetUp0() *TD {
 // Setup for realistic sizer
 func SetUp1() *TD {
 	sz := func(n int, ql, qr float64) float64 {
-		return float64(n) * float64(n) * qr * ql * (1 - qr) * (1 - ql) / 10.
+		return float64(n) * float64(n) * qr * ql * (1 - qr) * (1 - ql) / 50.
 	}
 	sz = ForceMinMax(sz)
 	td := NewTD(sz)
