@@ -6,9 +6,16 @@ type Sizer func(n int, ql, qr float64) float64
 
 // compiler checks
 var _ Sizer = LinearSizer
+var _ Sizer = PolySizer
 
 // NilSizer : When sizer is not set, use this value.
 var NilSizer Sizer = MakeConstSizer(1)
+
+// PolySizer defines a polynom structure for the sizer
+// Use ScaleSizer to scale this to the target ,nbr of buckets.
+func PolySizer(n int, ql, qr float64) float64 {
+	return float64(n) * float64(n) * qr * ql * (1 - qr) * (1 - ql)
+}
 
 // LinearSizer will size buckets linearly, ending up with appx 2 to 3  buckets.
 func LinearSizer(n int, ql, qr float64) float64 {
@@ -21,6 +28,14 @@ func LinearSizer(n int, ql, qr float64) float64 {
 func MakeConstSizer(k int) Sizer {
 	return func(_ int, _, _ float64) float64 {
 		return float64(k)
+	}
+}
+
+// ScaleSizer applies a scale to an existing sizer
+// Typically, scale is same order of magnitue as the number of buckets.
+func ScaleSizer(s Sizer, scale float64) Sizer {
+	return func(n int, ql, qr float64) float64 {
+		return s(n, ql, qr) / scale
 	}
 }
 

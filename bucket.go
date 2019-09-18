@@ -55,6 +55,12 @@ func (b *bkt) qr(n int) float64 {
 	return float64(b.sn+b.n) / float64(n)
 }
 
+// q is the average quartile for the bucket
+// n is the total nb of data points
+func (b *bkt) q(n int) float64 {
+	return (float64(b.sn) + float64(b.n)/2) / float64(n)
+}
+
 func (b *bkt) Equal(bb *bkt) bool {
 	if bb == nil {
 		return false

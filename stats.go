@@ -1,5 +1,7 @@
 package tdigest
 
+import "fmt"
+
 // At provides the value corresponding to the provided quartile.
 // The value returned is the best estimated such that the percentage
 // of datapoints that are strictly below this value is the quartile.
@@ -11,31 +13,37 @@ func (td *TD) At(quartile float64) (value float64) {
 		panic("Quartile should be between 0.0 and 1.0")
 	}
 
-	var q1, q2, v1, v2 float64
-	// First, lets find the closest values
-	for _, b := range td.bkts {
-		if q2 = b.ql(td.n); q2 > quartile {
-			// not yet ...
-			q1 = q2
+	var v1, q1 float64
+
+	// First, lets find the closest bucket immediately below
+	for i, b := range td.bkts {
+		if b.q(td.n) < quartile {
+			// not yet, keep moving but get values ...
 			v1 = b.mean()
+			q1 = b.q(td.n)
 		} else {
-			// We crossed the value ...
-			v2 = b.mean()
+			// We found a  bucket !
+			if i == 0 { // no previous, don't interpolate !
+				return b.mean()
+			}
+			// Interpolate with previous
+			v := b.mean()
+			q := b.q(td.n)
+			fmt.Printf("interpolating around %d", i)
+			return v1 + (quartile-q1)*(v-v1)/(q-q1)
+
 		}
 	}
 
-	if q1 == q2 {
-		return v1
-	}
-	return v1 + (v2-v1)/(q2-q1)
+	panic("No value matching requested quartile - unexpected error !")
 
 }
 
 // Quartile provides the quartile (percentage of data points that are
 // equals or below that value).
 func (td *TD) Quartile(value float64) float64 {
-	
-	// TODO
+
+	panic("Not implemented yet !")
 	return 0.
 }
 
