@@ -13,15 +13,16 @@ type TD struct {
 }
 
 // NewTD creates a new TDigest structure.
+// If sizer is nil, all buckets will be sized 1.
 func NewTD(sizer Sizer) *TD {
 	td := new(TD)
-	td.sizer = sizer
+	if sizer != nil {
+		td.sizer = sizer
+	} else {
+		// This sizer prevents any digest.
+		td.sizer = NilSizer
+	}
 	return td
-}
-
-// Count gets the total number of data points seen
-func (td *TD) Count() int {
-	return td.n
 }
 
 // Digest will sort and digest, then return the object for chaining.
@@ -104,14 +105,24 @@ func (td *TD) Merge(tt *TD) *TD {
 
 // String display human readable value.
 func (td *TD) String() string {
-	s := fmt.Sprintf("\nT-Digest (TD) structure description\nTotal count   : %d\nTotal buckets : %d\nBuckets ... \n",
+	s := fmt.Sprintf("\nT-Digest (TD) structure description"+
+		"\nCount  : %d"+
+		"\nMean   : %.2f"+
+		"\nMin    : %.2f"+
+		"\nMax    : %.2f"+
+		"\nThere are %d buckets ..."+
+		"\n",
 		td.n,
+		td.Mean(),
+		td.Min(),
+		td.Max(),
 		len(td.bkts),
 	)
-	for _, b := range td.bkts {
-		s += fmt.Sprintf("%s, quartiles left :%0.3f right:%0.3f\n",
-			b.String(), b.ql(td.n), b.qr(td.n))
+	for i, b := range td.bkts {
+		s += fmt.Sprintf("%d : %s, quartiles left :%0.6f right:%0.6f\n",
+			i, b.String(), b.ql(td.n), b.qr(td.n))
 	}
+
 	return s
 }
 

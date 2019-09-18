@@ -7,6 +7,9 @@ type Sizer func(n int, ql, qr float64) float64
 // compiler checks
 var _ Sizer = LinearSizer
 
+// NilSizer : When sizer is not set, use this value.
+var NilSizer Sizer = MakeConstSizer(1)
+
 // LinearSizer will size buckets linearly, ending up with appx 2 to 3  buckets.
 func LinearSizer(n int, ql, qr float64) float64 {
 	return float64(n) / 2.
@@ -22,6 +25,7 @@ func MakeConstSizer(k int) Sizer {
 }
 
 // MaxSizer returns a new Sizer that provides the max between the s1 and s2 Sizers.
+// Used when merging 2 tdigests.
 func MaxSizer(s1, s2 Sizer) Sizer {
 	return func(n int, ql, qr float64) float64 {
 		v1 := s1(n, ql, qr)
@@ -52,5 +56,12 @@ func ForceMinimumResolution(s Sizer, qres float64) Sizer {
 			return 1
 		}
 		return s(n, ql, qr)
+	}
+}
+
+// FromScaleFunction drives a Sizer from a scale function as defined in the T.Dunning paper.
+func FromScaleFunction(scale func(int, float64) float64) Sizer {
+	return func(n int, ql, qr float64) float64 {
+		return scale(n, qr) - scale(n, ql)
 	}
 }
