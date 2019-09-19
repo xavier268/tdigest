@@ -17,7 +17,7 @@ func SetUp0() *TD {
 
 // Setup for realistic sizer
 func SetUp1() *TD {
-	td := NewTD(PolySizer)
+	td := NewTD(PolySizer(1.0))
 	for i := 0; i < 10000000; i++ {
 		td.Add(float64((i * 98013) % 1000000))
 		if i%1000 == 0 { // Limit memory footprint

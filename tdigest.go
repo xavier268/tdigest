@@ -20,7 +20,7 @@ func NewTD(sizer Sizer) *TD {
 		td.sizer = sizer
 	} else {
 		// This sizer prevents any digest.
-		td.sizer = NilSizer
+		td.sizer = NilSizer()
 	}
 	return td
 }

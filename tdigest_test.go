@@ -41,7 +41,7 @@ func TestDigest3(t *testing.T) {
 }
 
 func TestDigestLinear(t *testing.T) {
-	td := NewTD(LinearSizer)
+	td := NewTD(LinearSizer(2.0))
 	td.Add(1., 7., 3., 2., 5., 0., 6.)
 	td.Digest()
 	//td.Dump()

@@ -37,7 +37,7 @@ func ExampleTD() {
 
 func ExampleSizer() {
 
-	td := NewTD(PolySizer)
+	td := NewTD(PolySizer(1.))
 
 	for i := 0; i <= 10000; i++ {
 		td.Add(float64(i))

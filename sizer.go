@@ -4,22 +4,32 @@ package tdigest
 // Assumptions are that 0 <= q <= 1.0
 type Sizer func(n int, q float64) float64
 
+// =========  High Order Functions ==================
+// These functions are used to generate custom Sizer.
+// ==================================================
+
 // NilSizer : When sizer is not set, use this value.
-var NilSizer Sizer = MakeConstSizer(1)
+func NilSizer() Sizer {
+	return MakeConstSizer(1)
+}
 
 // PolySizer defines a polynom structure for the sizer
-// Use ScaleSizer to scale this to the target ,nbr of buckets.
-var PolySizer Sizer = func(n int, q float64) float64 {
-	return float64(n) * q * (1 - q)
+// Use scale to adjust the numer of buckets.
+// Number of bucket increase when scale increase.
+func PolySizer(scale float64) Sizer {
+	return func(n int, q float64) float64 {
+		return float64(n) * q * (1 - q) / scale
+	}
 }
 
 // LinearSizer will size buckets linearly, ending up with appx 2 to 3  buckets.
-// Use scale to adjust actula number of buckets.
-var LinearSizer Sizer = func(n int, _ float64) float64 {
-	return float64(n) / 2.
+// Use scale to adjust actual number of buckets.
+// Number of bucket increase when scale increase.
+func LinearSizer(scale float64) Sizer {
+	return func(n int, _ float64) float64 {
+		return float64(n) / scale
+	}
 }
-
-// =========  High Order Functions ==================
 
 // MakeConstSizer provides a Sizer of a fixed value, k.
 func MakeConstSizer(k int) Sizer {
