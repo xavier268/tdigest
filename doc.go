@@ -9,8 +9,8 @@
 // that determines how aggressively the buckets used to aggregate the data are merged.
 // The merging process is triggered by the Digest method, which should be called regularly
 // when data points are added, and before computing anything.
-// A map-reduce approach is also achievable, since  TD structures can computed
-// in parallel and then merged. If both Sizer were not identical, the max of
-// both Sier is used (larger buckets).
+// A map-reduce approach is also achievable, since  TD structures can be computed
+// in parallel and then merged. When merging, if both Sizer were not identical, the max of
+// both Sizer is used (larger buckets).
 //
 package tdigest
