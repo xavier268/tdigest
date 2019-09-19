@@ -2,8 +2,8 @@
 // compute distribution quartiles on the fly from a potentially
 // large number of data points.
 //
-// It is (freely) inspired by the paper from
-// [T.Dunning](https://github.com/tdunning/t-digest/blob/master/docs/t-digest-paper/histo.pdf).
+// It is (freely) inspired by the paper from T.Dunning : 
+// https://github.com/tdunning/t-digest/blob/master/docs/t-digest-paper/histo.pdf 
 //
 // As new data points are added, the key parameter is the choice of the Sizer,
 // that determines how aggressively the buckets used to aggregate the data are merged.
