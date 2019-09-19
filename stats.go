@@ -87,3 +87,8 @@ func (td *TD) Mean() float64 {
 	}
 	return s / float64(td.n)
 }
+
+// Size returns the number of buckets.
+func (td *TD) Size() int {
+	return len(td.bkts)
+}

@@ -1,11 +1,15 @@
-package tdigest
+package tdigest_test
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/xavier268/tdigest"
+)
 
 func ExampleTD() {
 
 	// Create a TDigest structure
-	td := NewTD(nil)
+	td := tdigest.NewTD(nil)
 
 	// Add data points ...
 	for i := 0; i < 10; i++ {
@@ -37,7 +41,7 @@ func ExampleTD() {
 
 func ExampleSizer() {
 
-	td := NewTD(PolySizer)
+	td := tdigest.NewTD(tdigest.PolySizer)
 
 	for i := 0; i <= 10000; i++ {
 		td.Add(float64(i))
@@ -49,7 +53,7 @@ func ExampleSizer() {
 	td.Digest()
 	fmt.Printf("\nMedian : %.3f", td.At(.5))
 	fmt.Printf("\nQuartile : %.4f", td.Quartile(3000.))
-	fmt.Printf("\nNb bkts  : %d", len(td.bkts))
+	fmt.Printf("\nNb bkts  : %d", td.Size())
 
 	// Output:
 	// Median : 5000.000
