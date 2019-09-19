@@ -36,10 +36,8 @@ func ExampleTD() {
 }
 
 func ExampleSizer() {
-	// A polynomial sizer, scaled to less than 10 buckets.
-	sz := ScaleSizer(PolySizer, 60.)
 
-	td := NewTD(sz)
+	td := NewTD(PolySizer)
 
 	for i := 0; i <= 10000; i++ {
 		td.Add(float64(i))
@@ -49,8 +47,13 @@ func ExampleSizer() {
 		}
 	}
 	td.Digest()
-	fmt.Printf("\nMedian : %.3f\n", td.At(.5))
+	fmt.Printf("\nMedian : %.3f", td.At(.5))
+	fmt.Printf("\nQuartile : %.4f", td.Quartile(3000.))
+	fmt.Printf("\nNb bkts  : %d", len(td.bkts))
 
 	// Output:
 	// Median : 5000.000
+	// Quartile : 0.3000
+	// Nb bkts  : 27
+
 }

@@ -40,8 +40,27 @@ func (td *TD) At(quartile float64) (value float64) {
 // equals or below that value).
 func (td *TD) Quartile(value float64) float64 {
 
-	panic("Not implemented yet !")
-	return 0.
+	var v1, q1 float64
+
+	// First, lets find the closest bucket immediately below
+	for i, b := range td.bkts {
+		if b.mean() < value {
+			// not yet, keep moving but get values ...
+			v1 = b.mean()
+			q1 = b.q(td.n)
+		} else {
+			// We found a  bucket !
+			if i == 0 { // no previous, don't interpolate !
+				return 0.0
+			}
+			// Interpolate with previous
+			v := b.mean()
+			q := b.q(td.n)
+			return q1 + (value-v1)*(q-q1)/(v-v1)
+		}
+	}
+	// beyond the last bucket ...
+	return 1.0
 }
 
 // Min provides an estimated minimum.
