@@ -1,15 +1,11 @@
-package tdigest_test
+package tdigest
 
-import (
-	"fmt"
-
-	"github.com/xavier268/tdigest"
-)
+import "fmt"
 
 func ExampleTD() {
 
 	// Create a TDigest structure
-	td := tdigest.NewTD(nil)
+	td := NewTD(nil)
 
 	// Add data points ...
 	for i := 0; i < 10; i++ {
@@ -41,7 +37,7 @@ func ExampleTD() {
 
 func ExampleSizer() {
 
-	td := tdigest.NewTD(tdigest.PolySizer)
+	td := NewTD(PolySizer)
 
 	for i := 0; i <= 10000; i++ {
 		td.Add(float64(i))
