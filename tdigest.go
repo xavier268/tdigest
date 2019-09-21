@@ -91,14 +91,27 @@ func (td *TD) Add(values ...float64) *TD {
 }
 
 // Merge will merge tt into td.
-// It will combine the sizer, to the max of both.
+// It will use the Sizer from td, (If it differs
+// from the one from tt, make sure you uinderstand the implications ...).
 // It will (Sort and) Digest automatically.
 // tt is left unchanged.
 func (td *TD) Merge(tt *TD) *TD {
-	td.sizer = MaxSizer(td.sizer, tt.sizer)
 	td.n += tt.n
 	td.bkts = append(td.bkts, tt.bkts...)
 	td.Digest()
+	return td
+}
+
+// Sizer returns the Sizer of td.
+func (td *TD) Sizer() Sizer {
+	return td.sizer
+}
+
+// SetSizer sets a new Sizer for td.
+// It triggers Digest with this sizer.
+func (td *TD) SetSizer(sz Sizer) *TD {
+	td.sizer = sz
+	td.digest() // Assume it is already sorted !
 	return td
 }
 
