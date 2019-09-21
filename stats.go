@@ -7,6 +7,10 @@ package tdigest
 // Panic if quartile is out of range 0.0-1.0
 func (td *TD) At(quartile float64) (value float64) {
 
+	if td.dirty {
+		td.sort().digest()
+	}
+
 	if quartile < 0. || quartile > 1. {
 		panic("Quartile should be between 0.0 and 1.0")
 	}
@@ -42,6 +46,10 @@ func (td *TD) Quartile(value float64) float64 {
 
 	var v1, q1 float64
 
+	if td.dirty {
+		td.sort().digest()
+	}
+
 	// First, lets find the closest bucket immediately below
 	for i, b := range td.bkts {
 		if b.mean() < value {
@@ -66,21 +74,37 @@ func (td *TD) Quartile(value float64) float64 {
 // Min provides an estimated minimum.
 // Exact value only if first bucket contains a single element.
 func (td *TD) Min() float64 {
+
+	if td.dirty {
+		td.sort().digest()
+	}
+
 	return td.bkts[0].mean()
 }
 
 // Max estimated maximum.
 func (td *TD) Max() float64 {
+
+	if td.dirty {
+		td.sort().digest()
+	}
+
 	return td.bkts[len(td.bkts)-1].mean()
 }
 
 // Count gets the total number of data points seen
 func (td *TD) Count() int {
+	if td.dirty {
+		td.sort().digest()
+	}
 	return td.n
 }
 
 // Mean is the (exact) mean of the datat set.
 func (td *TD) Mean() float64 {
+	if td.dirty {
+		td.sort().digest()
+	}
 	s := 0.0
 	for _, b := range td.bkts {
 		s += b.sx
@@ -90,5 +114,8 @@ func (td *TD) Mean() float64 {
 
 // Size returns the number of buckets.
 func (td *TD) Size() int {
+	if td.dirty {
+		td.sort().digest()
+	}
 	return len(td.bkts)
 }

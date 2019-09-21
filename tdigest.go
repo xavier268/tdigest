@@ -10,6 +10,7 @@ type TD struct {
 	n     int   // total number of data points
 	bkts  []bkt // array of clusters
 	sizer Sizer // the bucket sizer
+	dirty bool  // is a digest needed ?
 }
 
 // NewTD creates a new TDigest structure.
@@ -22,12 +23,7 @@ func NewTD(sizer Sizer) *TD {
 		// This sizer prevents any digest.
 		td.sizer = NilSizer()
 	}
-	return td
-}
-
-// Digest will sort and digest, then return the object for chaining.
-func (td *TD) Digest() *TD {
-	td.sort().digest()
+	td.dirty = false
 	return td
 }
 
@@ -57,6 +53,7 @@ func (td *TD) digest() *TD {
 		}
 
 	}
+	td.dirty = false
 	return td
 
 }
@@ -76,17 +73,19 @@ func (td *TD) sort() *TD {
 		c += b.n
 	}
 	td.n = c
+	td.dirty = true
 	return td
 }
 
 // Add a set of values.
 // Values are added as independant buckets.
-// You NEED to sort/digest when finished : this is not done by default.
+// You do not need to digest, this will happen as needed
 func (td *TD) Add(values ...float64) *TD {
 	for _, v := range values {
 		b := bkt{sx: v, n: 1}
 		td.bkts = append(td.bkts, b)
 	}
+	td.dirty = (len(values) != 0)
 	return td
 }
 
@@ -98,7 +97,7 @@ func (td *TD) Add(values ...float64) *TD {
 func (td *TD) Merge(tt *TD) *TD {
 	td.n += tt.n
 	td.bkts = append(td.bkts, tt.bkts...)
-	td.Digest()
+	td.sort().digest()
 	return td
 }
 
@@ -111,19 +110,26 @@ func (td *TD) Sizer() Sizer {
 // It triggers Digest with this sizer.
 func (td *TD) SetSizer(sz Sizer) *TD {
 	td.sizer = sz
-	td.digest() // Assume it is already sorted !
+	td.sort().digest()
 	return td
 }
 
 // String display human readable value.
 func (td *TD) String() string {
+
+	if td.dirty {
+		td.sort().digest()
+	}
+
 	s := fmt.Sprintf("\nT-Digest (TD) structure description"+
+		"\nNeed digesting ? : %v"+
 		"\nCount  : %d"+
 		"\nMean   : %.2f"+
 		"\nMin    : %.2f"+
 		"\nMax    : %.2f"+
 		"\nThere are %d buckets ..."+
 		"\n",
+		td.dirty,
 		td.n,
 		td.Mean(),
 		td.Min(),

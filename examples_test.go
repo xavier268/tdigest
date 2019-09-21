@@ -12,11 +12,10 @@ func ExampleTD() {
 		td.Add(float64(i))
 	}
 
-	// Final digest
-	td.Digest()
 	td.Dump()
 	// Output:
 	// T-Digest (TD) structure description
+	// Need digesting ? : false
 	// Count  : 10
 	// Mean   : 4.50
 	// Min    : 0.00
@@ -41,12 +40,7 @@ func ExampleSizer() {
 
 	for i := 0; i <= 10000; i++ {
 		td.Add(float64(i))
-		// Bounded memory footprint ...
-		if i%100 == 0 {
-			td.Digest()
-		}
 	}
-	td.Digest()
 	fmt.Printf("\nMedian : %.3f", td.At(.5))
 	fmt.Printf("\nQuartile : %.4f", td.Quartile(3000.))
 	fmt.Printf("\nNb bkts  : %d", td.Size())
@@ -54,6 +48,6 @@ func ExampleSizer() {
 	// Output:
 	// Median : 5000.000
 	// Quartile : 0.3000
-	// Nb bkts  : 27
+	// Nb bkts  : 21
 
 }

@@ -11,7 +11,7 @@ func SetUp0() *TD {
 	for i := 0; i < 100; i++ {
 		td.Add(float64(i))
 	}
-	td.Digest()
+	td.sort().digest()
 	return td
 }
 
@@ -20,11 +20,11 @@ func SetUp1() *TD {
 	td := NewTD(PolySizer(1.0))
 	for i := 0; i < 10000000; i++ {
 		td.Add(float64((i * 98013) % 1000000))
-		if i%1000 == 0 { // Limit memory footprint
-			td.Digest()
+		if i%1000 == 0 {
+			td.sort().digest()
 		}
 	}
-	td.Digest()
+	td.sort().digest()
 	return td
 }
 
