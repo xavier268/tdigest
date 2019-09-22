@@ -12,7 +12,7 @@ type TD struct {
 	sizer Sizer // the bucket sizer
 }
 
-// DigestFreq triggers the auato digest when adding large data arrays.
+// DigestFreq triggers the auto digest when adding large data arrays.
 const DigestFreq = 100
 
 // NewTD creates a new TDigest structure.
@@ -25,7 +25,7 @@ func NewTD(sizer Sizer) *TD {
 		// This sizer prevents any digest.
 		td.sizer = NilSizer()
 	}
-	td.bkts = make([]bkt, 0, 1000)
+	td.bkts = make([]bkt, 0, DigestFreq)
 	return td
 }
 
