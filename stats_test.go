@@ -18,13 +18,11 @@ func SetUp0() *TD {
 // Setup for realistic sizer
 func SetUp1() *TD {
 	td := NewTD(PolySizer(1.0))
+	v := make([]float64, 10000000)
 	for i := 0; i < 10000000; i++ {
-		td.Add(float64((i * 98013) % 1000000))
-		if i%1000 == 0 {
-			td.sort().digest()
-		}
+		v[i] = float64((i * 98013) % 1000000)
 	}
-	td.sort().digest()
+	td.Add(v...)
 	return td
 }
 

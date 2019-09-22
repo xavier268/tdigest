@@ -48,6 +48,6 @@ func ExampleSizer() {
 	// Output:
 	// Median : 5000.000
 	// Quartile : 0.3000
-	// Nb bkts  : 21
+	// Nb bkts  : 29
 
 }

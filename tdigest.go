@@ -23,6 +23,7 @@ func NewTD(sizer Sizer) *TD {
 		// This sizer prevents any digest.
 		td.sizer = NilSizer()
 	}
+	td.bkts = make([]bkt, 0, 1000)
 	td.dirty = false
 	return td
 }
@@ -78,14 +79,20 @@ func (td *TD) sort() *TD {
 }
 
 // Add a set of values.
-// Values are added as independant buckets.
-// You do not need to digest, this will happen as needed
+// Values are added as independant buckets,
+// then merge happens automatically.
 func (td *TD) Add(values ...float64) *TD {
-	for _, v := range values {
+	if len(values) == 0 {
+		return td
+	}
+	for i, v := range values {
 		b := bkt{sx: v, n: 1}
 		td.bkts = append(td.bkts, b)
+		if i%1000 == 0 { // force regular digesting, to keep memory footprint and cpu bounded.
+			td.sort().digest()
+		}
 	}
-	td.dirty = (len(values) != 0)
+	td.sort().digest()
 	return td
 }
 
