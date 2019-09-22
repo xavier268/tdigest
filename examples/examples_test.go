@@ -22,7 +22,6 @@ func ExampleTD() {
 	td.Dump()
 	// Output:
 	// T-Digest (TD) structure description
-	// Need digesting ? : false
 	// Count  : 10
 	// Mean   : 4.50
 	// Min    : 0.00

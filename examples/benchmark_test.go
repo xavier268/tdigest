@@ -22,7 +22,7 @@ func BenchmarkAddOneByOne(b *testing.B) {
 
 }
 
-// The following is about 30 x faster that single adds,
+// The following is about 50 x faster that single adds,
 // for the exact same data added.
 func BenchmarkAdd10000By10000(b *testing.B) {
 

@@ -10,10 +10,9 @@ type TD struct {
 	n     int   // total number of data points
 	bkts  []bkt // array of clusters
 	sizer Sizer // the bucket sizer
-	dirty bool  // is a digest needed ?
 }
 
-// DigestFreq triggers the auato digest when adding data arrays.
+// DigestFreq triggers the auato digest when adding large data arrays.
 const DigestFreq = 100
 
 // NewTD creates a new TDigest structure.
@@ -27,7 +26,6 @@ func NewTD(sizer Sizer) *TD {
 		td.sizer = NilSizer()
 	}
 	td.bkts = make([]bkt, 0, 1000)
-	td.dirty = false
 	return td
 }
 
@@ -57,7 +55,6 @@ func (td *TD) digest() *TD {
 		}
 
 	}
-	td.dirty = false
 	return td
 
 }
@@ -77,7 +74,6 @@ func (td *TD) sort() *TD {
 		c += b.n
 	}
 	td.n = c
-	td.dirty = true
 	return td
 }
 
@@ -127,19 +123,13 @@ func (td *TD) SetSizer(sz Sizer) *TD {
 // String display human readable value.
 func (td *TD) String() string {
 
-	if td.dirty {
-		td.sort().digest()
-	}
-
 	s := fmt.Sprintf("\nT-Digest (TD) structure description"+
-		"\nNeed digesting ? : %v"+
 		"\nCount  : %d"+
 		"\nMean   : %.2f"+
 		"\nMin    : %.2f"+
 		"\nMax    : %.2f"+
 		"\nThere are %d buckets ..."+
 		"\n",
-		td.dirty,
 		td.n,
 		td.Mean(),
 		td.Min(),
