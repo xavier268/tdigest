@@ -58,18 +58,14 @@ func ExampleSizer() {
 
 	// Compute some stats results
 
-	// The valus corresponding to a 50% quartile ?
+	// The value corresponding to a 50% quartile ?
 	fmt.Printf("\nMedian : %.3f", td.At(.5))
 
 	// The quartile corresponding to the 3000.0 value ?
 	fmt.Printf("\nQuartile : %.4f", td.Quartile(3000.))
 
-	// The number of buckets ?
-	fmt.Printf("\nNb bkts  : %d", td.Size())
-
 	// Output:
 	// Median : 5000.000
 	// Quartile : 0.3000
-	// Nb bkts  : 24
 
 }

@@ -13,6 +13,9 @@ type TD struct {
 	dirty bool  // is a digest needed ?
 }
 
+// DigestFreq triggers the auato digest when adding data arrays.
+const DigestFreq = 100
+
 // NewTD creates a new TDigest structure.
 // If sizer is nil, all buckets will be sized 1.
 func NewTD(sizer Sizer) *TD {
@@ -88,7 +91,7 @@ func (td *TD) Add(values ...float64) *TD {
 	for i, v := range values {
 		b := bkt{sx: v, n: 1}
 		td.bkts = append(td.bkts, b)
-		if i%1000 == 0 { // force regular digesting, to keep memory footprint and cpu bounded.
+		if i%DigestFreq == 0 { // force regular digesting, to keep memory footprint and cpu bounded.
 			td.sort().digest()
 		}
 	}

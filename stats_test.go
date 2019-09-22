@@ -8,10 +8,11 @@ import (
 // Single value buckets
 func SetUp0() *TD {
 	td := NewTD(nil)
+	data := make([]float64, 100)
 	for i := 0; i < 100; i++ {
-		td.Add(float64(i))
+		data[i] = float64(i)
 	}
-	td.sort().digest()
+	td.Add(data...)
 	return td
 }
 
