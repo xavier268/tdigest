@@ -1,16 +1,23 @@
-package tdigest
+package examples
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/xavier268/tdigest"
+)
 
 func ExampleTD() {
 
 	// Create a TDigest structure
-	td := NewTD(nil)
+	td := tdigest.NewTD(nil)
 
-	// Add data points ...
+	// Prepare data points ...
+	data := make([]float64, 10)
 	for i := 0; i < 10; i++ {
-		td.Add(float64(i))
+		data[i] = float64(i)
 	}
+	// Add datapoints
+	td.Add(data...)
 
 	td.Dump()
 	// Output:
@@ -36,18 +43,33 @@ func ExampleTD() {
 
 func ExampleSizer() {
 
-	td := NewTD(PolySizer(1.))
+	// Prepare TD tdigest, with a polynomial Sizer
+	// that makes center buckets bigger and tail-buckets very small.
+	td := tdigest.NewTD(tdigest.PolySizer(1.))
 
+	// Prepare data
+	data := make([]float64, 10000+1)
 	for i := 0; i <= 10000; i++ {
-		td.Add(float64(i))
+		data[i] = float64(i)
 	}
+
+	//Add data
+	td.Add(data...)
+
+	// Compute some stats results
+
+	// The valus corresponding to a 50% quartile ?
 	fmt.Printf("\nMedian : %.3f", td.At(.5))
+
+	// The quartile corresponding to the 3000.0 value ?
 	fmt.Printf("\nQuartile : %.4f", td.Quartile(3000.))
+
+	// The number of buckets ?
 	fmt.Printf("\nNb bkts  : %d", td.Size())
 
 	// Output:
 	// Median : 5000.000
 	// Quartile : 0.3000
-	// Nb bkts  : 29
+	// Nb bkts  : 24
 
 }
