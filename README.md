@@ -1,6 +1,6 @@
 # tdigest
 
-[![GoDoc](https://godoc.org/github.com/xavier268/tdigest?status.svg)](https://godoc.org/github.com/xavier268/tdigest)  [![Build Status](https://travis-ci.org/xavier268/tdigest.svg?branch=master)](https://travis-ci.org/xavier268/tdigest)
+[![GoDoc](https://godoc.org/github.com/xavier268/tdigest?status.svg)](https://godoc.org/github.com/xavier268/tdigest)  [![Build Status](https://travis-ci.com/xavier268/tdigest.svg?branch=master)](https://travis-ci.com/xavier268/tdigest)
 
 A GO implementation of the t-digest algorithm for "on the fly" statistics calculations on large data sets.
 
